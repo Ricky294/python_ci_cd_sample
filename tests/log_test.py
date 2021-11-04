@@ -59,5 +59,6 @@ def test_inject_logger():
 
 
 def test_log_exception():
+    print("")
     with pytest.raises(ZeroDivisionError):
         log_exception(name=_EXCEPTION_LOGGER)(lambda: 1 / 0)()
