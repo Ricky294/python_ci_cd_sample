@@ -1,5 +1,6 @@
 import json
 import os.path
+import pytest
 
 from python_ci_cd_sample.reader import read_lines, read_json
 
@@ -12,36 +13,38 @@ json_content = {
 }
 
 
-# Setup
-with open(os.path.join("tests", "resources/empty_file.txt"), "w") as _:
-    pass
+@pytest.fixture(autouse=True)
+def setup_and_tear_down():
+    # SETUP
+    with open(os.path.join("tests", "resources", "empty_file.txt"), "w") as _:
+        pass
 
-with open(os.path.join("tests", "resources/file_with_lines.txt"), "w") as f:
-    f.write(file_content)
+    with open(os.path.join("tests", "resources", "file_with_lines.txt"), "w") as f:
+        f.write(file_content)
 
-with open(os.path.join("tests", "resources/json_file.json"), "w") as f:
-    f.write(json.dumps(json_content))
+    with open(os.path.join("tests", "resources", "json_file.json"), "w") as f:
+        f.write(json.dumps(json_content))
 
 
-@read_lines("tests", "resources/empty_file.txt")
+@read_lines("tests", "resources", "empty_file.txt")
 def read_lines_empty_file():
     return read_lines_empty_file.lines
 
 
-@read_lines("tests", "resources/file_with_lines.txt")
+@read_lines("tests", "resources", "file_with_lines.txt")
 def read_lines_filter_empty():
     return read_lines_filter_empty.lines
 
 
 @read_lines(
-    "tests", "resources/file_with_lines.txt",
+    "tests", "resources", "file_with_lines.txt",
     filter_empty=False,
 )
 def read_lines():
     return read_lines.lines
 
 
-@read_json("tests", "resources/json_file.json")
+@read_json("tests", "resources", "json_file.json")
 def read_json():
     return read_json.json
 
